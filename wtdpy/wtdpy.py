@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Union, Sequence, List
-
+import io
 import httpx
 import json
 import pandas as pd
@@ -93,7 +93,7 @@ class WTDpy:
 
         Returns
         -------
-        response : dict or pd.DataFrame
+        to_return : dict or pd.DataFrame
             A dictionary or a pandas DataFrame. If `symbol` is a list
             then a dictionary of pandas DataFrames will be returned.
 
@@ -101,12 +101,6 @@ class WTDpy:
 
         request_url = self.url + "history"
         params = {"api_token": self.api_token}
-
-        # Check if provided symbol(s) are available
-        if self.search_available_data(symbol):
-            params.update({"symbol": symbol})
-        else:
-            raise ValueError("Requested symbols are not available")
 
         # Check date from
         if type(date_from) == str:
@@ -145,18 +139,46 @@ class WTDpy:
             raise TypeError(
                 f"Provided output '{output}' is not equal to either 'dict' or 'df'"
             )
+
+        # Prepare request per symbol
+        if type(symbol) == str:
+            symbol = [symbol]
+
+        # Returning dict
+        to_return = {}
+
+        for sym in symbol:
+
+            # Check if provided symbol are available
+            if self.search_available_data(sym):
+                params.update({"symbol": sym})
+            else:
+                raise ValueError("Requested symbols are not available")
+
+            # Make the request
+            response = httpx.get(request_url, params=params)
+            response = response.json()
+
+            # Alter the response based on input
+            if output == "dict":
+                to_return.update({sym: response})
+
+            elif output == "df":
+                to_return.update(
+                    {sym: pd.DataFrame.from_dict(response["history"], orient="index")}
+                )
+
+        if len(to_return) == 1 and output == "df":
+            return to_return[sym]
+
         else:
-            params.update({"output": output})
-
-        # Make the request
-        response = httpx.get(request_url, params=params)
-
-        # Alter the response based on input
-
-        return response
+            return to_return
 
     def search_available_data(
-        self, symbol: Union[str, Sequence[str]], list_alternatives: bool = False
+        self,
+        symbol: Union[str, Sequence[str]],
+        list_alternatives: bool = False,
+        number_of_alternatives: int = 1,
     ) -> Union[bool, Sequence[dict]]:
         """ Check if the requested data is available.
 
@@ -171,18 +193,23 @@ class WTDpy:
         
         list_alternatives : bool
             If `True` a list of likely matches is presented 
+        
+        number_of_alternatives : int
+            The number of alternatives, besides the top hit, 
+            that are checked whether or not they match the 
+            provided symbol. 
 
         Returns
         -------
         response : bool or list
             A boolean to check whether data is avaible. If 
-            `list_alternatives` is `True` and a symbols is not found
+            `list_alternatives` is `True` and a symbol is not found
             a list with possible alternatives will be returned.
 
         """
 
         request_url = self.url + "stock_search"
-        params = {"api_token": self.api_token, "limit": 1}
+        params = {"api_token": self.api_token, "limit": number_of_alternatives}
 
         # Matching symbols found
         matching_symbols = True
@@ -196,23 +223,36 @@ class WTDpy:
             symbol = [symbol]
 
         for sym in symbol:
+            symbol_found = False
             params.update({"search_term": sym})
             response = httpx.get(request_url, params=params)
             response = response.json()
 
-            if response["data"][0]["symbol"] != sym:
-                matching_symbols = False
+            for ix, _ in enumerate(response["data"]):
+                # print(response["data"])
+                # print(ix)
+                if response["data"][ix]["symbol"] == sym:
+                    symbol_found = True
+                    break
 
-                if list_alternatives:
-                    alternatives.append(
-                        {
-                            "Symbol": response["data"][0]["symbol"],
-                            "Name": response["data"][0]["name"],
-                        }
-                    )
+                else:
+                    symbol_found = False
+
+                    if list_alternatives:
+                        alternatives.append(
+                            {
+                                "Symbol": response["data"][ix]["symbol"],
+                                "Name": response["data"][ix]["name"],
+                            }
+                        )
+
+            if not symbol_found:
+                matching_symbols = False
 
         # Return either a bool or a list with alternative symbols
         if not list_alternatives:
+            return matching_symbols
+        elif not alternatives:
             return matching_symbols
         else:
             return alternatives
