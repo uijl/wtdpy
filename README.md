@@ -1,13 +1,10 @@
-# WTDpy: Basic calls to the World Trading Data API with Python.
+# WTDpy: Use the World Trading Data API with Python.
 
-<!-- # CircleCI build -->
-<!-- # CodeCoverage -->
+[![CircleCI](https://circleci.com/gh/uijl/wtdpy.svg?style=svg)](https://circleci.com/gh/uijl/wtdpy)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
 
-Quantitative Index Analysis with Python.
-Work in Progress.
-
 ## Installation
+
 Installation using *pip install wtdpy* is not yet available. Running following three lines in your command prompt will allow you installing the package as well:
 
 ``` bash
