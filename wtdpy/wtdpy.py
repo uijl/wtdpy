@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Union
+from typing import Union, Sequence, List
 
 import httpx
 import json
@@ -41,19 +41,16 @@ class WTDpy:
         self.url = "https://api.worldtradingdata.com/api/v1/"
         self.api_token = api_token
 
-    # TODO: how to set self for typehinting
-    # TODO: how to set a string or list of strings for typehinting
-    # TODO: output either dict or pd.DataFrae for typehinting
     # TODO: error if connection if request is failing
 
     def get_historical_data(
         self,
-        symbol: str,
-        date_from: Union[(datetime, str)] = None,
-        date_to: Union[(datetime, str)] = None,
+        symbol: Union[str, Sequence[str]],
+        date_from: Union[datetime, str] = None,
+        date_to: Union[datetime, str] = None,
         sort: str = "asc",
         output: str = "dict",
-    ) -> dict:
+    ) -> Union[dict, pd.DataFrame]:
         """ Get the historical data for the given symbol.
 
         Parameters
@@ -158,7 +155,9 @@ class WTDpy:
 
         return response
 
-    def search_available_data(self, symbol, list_alternatives: bool = False):
+    def search_available_data(
+        self, symbol: Union[str, Sequence[str]], list_alternatives: bool = False
+    ) -> Union[bool, Sequence[dict]]:
         """ Check if the requested data is available.
 
         Parameters

@@ -1,8 +1,5 @@
-# WTDpy
+# WTDpy: Basic calls to the World Trading Data API with Python.
 
-----------------------------
-
-# wtdpy: World Trading Data Python API 
 <!-- # CircleCI build -->
 <!-- # CodeCoverage -->
 [![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
