@@ -1,7 +1,9 @@
-# WTDpy: Use the World Trading Data API with Python.
-
 [![CircleCI](https://circleci.com/gh/uijl/wtdpy.svg?style=svg)](https://circleci.com/gh/uijl/wtdpy)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
+
+# WTDpy
+
+Basic calls to the World Trading Data API with Python.
 
 ## Installation
 
