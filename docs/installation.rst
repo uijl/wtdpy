@@ -17,7 +17,7 @@ To install WTDpy, run this command in your terminal:
 
 This is the preferred method to install WTDpy, as it will always install the most recent stable release.
 
-If you do not `pip`_ installed, this `Python installation guide`_ can guide
+If you do not have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
 .. _pip: https://pip.pypa.io

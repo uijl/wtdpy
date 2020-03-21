@@ -14,13 +14,3 @@ wtdpy\.wtdpy module
 
 .. automodule:: wtdpy.wtdpy
    :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: wtdpy
-   :members:
-   :undoc-members:
-   :show-inheritance:

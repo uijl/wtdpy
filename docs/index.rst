@@ -10,6 +10,7 @@ Welcome to WTDpy documentation! Please check the contents below for information 
    :caption: Contents:
 
    installation
+   examples
    wtdpy
 
 Indices and tables

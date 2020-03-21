@@ -9,21 +9,21 @@ import pandas as pd
 class WTDpy:
     """ Python wrapper for the World Trading Data API.
 
-    Parameters
-    ----------
+    **Parameters**
+    
     api_token : str 
         Your personal API token from https://www.worldtradingdata.com/.
     
-    Attributes
-    ----------
+    **Attributes**
+
     api_token : str 
         Your personal API token from https://www.worldtradingdata.com/.
     
     url : str
         The base url for requesting the API.
 
-    Notes
-    -----
+    **Notes**
+
     Create an account on https://www.worldtradingdata.com/ 
     to obtain your API key. It will show on the top of your
     personal dashboard. You can make 250 API calls per day
@@ -53,8 +53,8 @@ class WTDpy:
     ) -> Union[dict, pd.DataFrame]:
         """ Get the historical data for the given symbol.
 
-        Parameters
-        ----------
+        **Parameters**
+        
         symbol : str or list of str
             A string or list of strings such as "^AEX", 
             or ["^AEX", "^DAX"]. The symbols should match 
@@ -80,8 +80,8 @@ class WTDpy:
             A string representing the desired output. Either
             `dict` for a python dict or "df" for a pandas DataFrame.
         
-        Raises
-        ------
+        **Raises**
+        
         ValueError
             * If provided symbol is not available.
 
@@ -91,8 +91,8 @@ class WTDpy:
             * If `sort` is not a correct string
             * If `output` is not a correct string
 
-        Returns
-        -------
+        **Returns**
+        
         to_return : dict or pd.DataFrame
             A dictionary or a pandas DataFrame. If `symbol` is a list
             then a dictionary of pandas DataFrames will be returned.
@@ -182,8 +182,8 @@ class WTDpy:
     ) -> Union[bool, Sequence[dict]]:
         """ Check if the requested data is available.
 
-        Parameters
-        ----------
+        **Parameters**
+        
         symbol : str or list of str
             A string or list of strings such as "^AEX", 
             or ["^AEX", "^DAX"]. The symbols should match 
@@ -199,8 +199,8 @@ class WTDpy:
             that are checked whether or not they match the 
             provided symbol. 
 
-        Returns
-        -------
+        **Returns**
+        
         response : bool or list
             A boolean to check whether data is avaible. If 
             `list_alternatives` is `True` and a symbol is not found
