@@ -212,7 +212,7 @@ class WTDpy:
         params = {"api_token": self.api_token, "limit": number_of_alternatives}
 
         # Matching symbols found
-        matching_symbols = True
+        matching_symbols = False
 
         # possible alternatives
         if list_alternatives:
@@ -246,8 +246,8 @@ class WTDpy:
                             }
                         )
 
-            if not symbol_found:
-                matching_symbols = False
+            if symbol_found:
+                matching_symbols = True
 
         # Return either a bool or a list with alternative symbols
         if not list_alternatives:
