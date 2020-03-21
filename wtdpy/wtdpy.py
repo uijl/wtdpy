@@ -123,7 +123,7 @@ class WTDpy:
                     f"Provided date_to '{date_to}' does not match isoformat yyyy-mm-dd"
                 )
             params.update({"date_to": date_to})
-        elif type(date_from) == datetime:
+        elif type(date_to) == datetime:
             params.update({"date_to": str(date_to.date())})
 
         # Check sorting request
