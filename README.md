@@ -4,7 +4,26 @@
 
 # WTDpy
 
-Basic calls to the World Trading Data API with Python. You can find the documentation over [here](https://wtdpy.readthedocs.io).
+Basic calls to the World Trading Data API with Python. 
+You can find the documentation over [here](https://wtdpy.readthedocs.io).
+
+## Starting up
+
+The code snip below shows how you can initialise the WTDpy class. As soon as you have the `WTDpy` class initialised you can start calling the various functions.
+
+```python
+# Import wtdpy library
+from wtdpy import WTDpy
+
+# Specifiy your api key
+api_token = "Your_API_Token"
+
+# Initialise class
+wtdpy = WTDpy(api_token=api_token)
+
+# Search for a stock or index
+MSFT = wtdpy.search("Microsoft")
+```
 
 ## Installation
 
