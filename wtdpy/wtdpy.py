@@ -229,8 +229,6 @@ class WTDpy:
             response = response.json()
 
             for ix, _ in enumerate(response["data"]):
-                # print(response["data"])
-                # print(ix)
                 if response["data"][ix]["symbol"] == sym:
                     symbol_found = True
                     break
@@ -256,3 +254,54 @@ class WTDpy:
             return matching_symbols
         else:
             return alternatives
+
+    def search(
+        self, query: Union[str, Sequence[str]], number_of_hits: int = 5
+    ) -> Union[dict, Sequence[dict]]:
+        """ Search the query in the World Trading Data database.
+
+        **Parameters**
+        
+        query : str or list of str
+            A string or list of strings such as "Apple computers"
+            or ["Apple computers", "Microsoft"]. This is similar
+            to manually checking https://www.worldtradingdata.com/search 
+            to see what data is available at World Trading Data.
+        
+        number_of_hits : int
+            The number of hits that will be returned. 
+
+        **Returns**
+        
+        response : dict or list
+            A dict, or a list of dicts, with the listed hits based on
+            your search query.
+
+        """
+
+        request_url = self.url + "stock_search"
+        params = {"api_token": self.api_token, "limit": number_of_hits}
+
+        returned_hits = {}
+
+        # Prepare request per symbol
+        if type(query) == str:
+            query = [query]
+
+        for q in query:
+            params.update({"search_term": q})
+            returned_hits.update({q: []})
+
+            response = httpx.get(request_url, params=params)
+            response = response.json()
+
+            for ix, _ in enumerate(response["data"]):
+                returned_hits[q].append(
+                    {
+                        "Symbol": response["data"][ix]["symbol"],
+                        "Name": response["data"][ix]["name"],
+                    }
+                )
+
+        # Return the search results
+        return returned_hits
