@@ -2,11 +2,8 @@
 
 from setuptools import setup, find_packages
 
-with open("README.md") as readme_file:
-    readme = readme_file.read()
-
-with open("README.md") as history_file:
-    history = history_file.read()
+with open("README.md", "r") as fh:
+    long_description = fh.read()
 
 requirements = ["pandas", "httpx"]
 
@@ -25,25 +22,22 @@ setup(
     author="Joris den Uijl",
     author_email="jorisdenuijl@gmail.com",
     classifiers=[
-        "Development Status :: 4 - Beta" "Intended Audience :: Developers",
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
+        "Operating System :: OS Independent",
     ],
     description="Basic calls to the World Trading Data API with Python.",
     install_requires=requirements,
-    long_description=readme + "\n\n" + history,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     include_package_data=True,
-    keywords="wtdpy",
-    name="wtdpy",
+    keywords=["wtdpy", "world trading data", "API"],
+    name="WTDpy",
     packages=find_packages(include=["wtdpy"]),
     setup_requires=setup_requirements,
     test_suite="tests",
     tests_require=test_requirements,
     url="https://github.com/uijl/wtdpy",
-    version="0.0.1",
+    version="0.0.2",
     zip_safe=False,
 )
