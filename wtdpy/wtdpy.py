@@ -303,5 +303,7 @@ class WTDpy:
                     }
                 )
 
+        print(returned_hits)
+
         # Return the search results
         return returned_hits

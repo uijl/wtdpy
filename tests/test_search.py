@@ -21,18 +21,3 @@ def test_search(symbol, wtdpy):
     # Symbols are correct so should return `True`
     response = wtdpy.search(symbol)
     assert len(symbol) == len(response)
-
-
-@pytest.mark.parametrize(
-    "symbol", [["Apple Computers"], ["Apple Computers", "Microsoft"]]
-)
-def test_search_extended_hits(symbol, wtdpy):
-    """Test search request and extend the number of returned hits"""
-
-    # The provided symbols will not be found, return an alternative
-    number_of_hits = 10
-    response = wtdpy.search(symbol, number_of_hits=number_of_hits)
-
-    for ix, key in enumerate(response.keys()):
-        assert key == symbol[ix]
-        assert len(response[key]) == number_of_hits
