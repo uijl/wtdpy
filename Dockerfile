@@ -1,6 +1,12 @@
 # Start with docker image from anaconda
 FROM continuumio/miniconda3
 
+# Set working directory
+WORKDIR /wtdpy
+
+COPY requirements.txt /wtdpy/requirements.txt
+COPY test-requirements.txt /wtdpy/test-requirements.txt
+
 # Then install rest via pip
 RUN \
     pip install --upgrade pip \
@@ -8,7 +14,6 @@ RUN \
     && pip install -r ./test-requirements.txt
 
 ADD . /wtdpy
-WORKDIR /wtdpy
 
 # Install the application
 RUN pip install -e .
