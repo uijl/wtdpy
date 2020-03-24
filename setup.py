@@ -5,11 +5,13 @@ from setuptools import setup, find_packages
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open('requirements.txt') as f:
-    requirements = f.read().splitlines()
+with open('requirements.txt') as fh:
+    requirements = fh.read().splitlines()
 
-with open('test-requirements.txt') as f:
-    test_requirements = f.read().splitlines()
+with open('test-requirements.txt') as fh:
+    test_requirements = fh.read().splitlines()
+
+setup_requirements = ["pytest-runner"]
 
 setup(
     author="Joris den Uijl",
@@ -28,6 +30,7 @@ setup(
     name="WTDpy",
     packages=find_packages(include=["wtdpy"]),
     test_suite="tests",
+    setup_requires=setup_requirements,
     tests_require=test_requirements,
     url="https://github.com/uijl/wtdpy",
     version="0.0.2",

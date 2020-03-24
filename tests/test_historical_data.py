@@ -96,7 +96,7 @@ def test_historical_data_sort(symbol, wtdpy):
 
 @pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
 def test_historical_data_output(symbol, wtdpy):
-    """Test historical data request with a output parameter"""
+    """Test historical data request with an output parameter"""
 
     # Pandas DataFrame
     response = wtdpy.get_historical_data(symbol, output="df")
@@ -110,7 +110,7 @@ def test_historical_data_output(symbol, wtdpy):
 
 
 @pytest.mark.parametrize("symbol", [["test_1"], ["test_1", "test_2"]])
-def test_historical_data_output(symbol, wtdpy):
+def test_historical_data_output_false_symbol(symbol, wtdpy):
     """Test historical data request with a false symbol"""
 
     with pytest.raises(ValueError):
