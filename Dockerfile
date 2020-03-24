@@ -2,7 +2,10 @@
 FROM continuumio/miniconda3
 
 # Then install rest via pip
-RUN pip install --upgrade pip
+RUN \
+    pip install --upgrade pip \
+    && pip install -r ./requirements.txt \
+    && pip install -r ./test-requirements.txt
 
 ADD . /wtdpy
 WORKDIR /wtdpy
