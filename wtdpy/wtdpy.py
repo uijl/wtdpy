@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import List, Sequence, Union
+from typing import List, Sequence, Union, Optional, Dict
 
 import httpx
 import pandas as pd
@@ -45,9 +45,9 @@ class WTDpy:
 
     def get_historical_data(
         self,
-        symbol: Union[str, Sequence[str]],
-        date_from: Union[datetime, str] = None,
-        date_to: Union[datetime, str] = None,
+        symbol: Union[str, List[str]],
+        date_from: Optional[Union[datetime, str]] = None,
+        date_to: Optional[Union[datetime, str]] = None,
         sort: str = "asc",
         output: str = "dict",
     ) -> Union[dict, pd.DataFrame]:
@@ -103,7 +103,9 @@ class WTDpy:
         params = {"api_token": self.api_token}
 
         # Check date from
-        if type(date_from) == str:
+        if isinstance(date_from, datetime):
+            params.update({"date_from": str(date_from.date())})
+        elif isinstance(date_from, str):
             try:
                 datetime.strptime(date_from, "%Y-%m-%d")
             except:
@@ -111,11 +113,11 @@ class WTDpy:
                     f"Provided date_from '{date_from}' does not match isoformat yyyy-mm-dd"
                 )
             params.update({"date_from": date_from})
-        elif type(date_from) == datetime:
-            params.update({"date_from": str(date_from.date())})
 
         # Check date to
-        if type(date_to) == str:
+        if isinstance(date_to, datetime):
+            params.update({"date_to": str(date_to.date())})
+        elif isinstance(date_to, str):
             try:
                 datetime.strptime(date_to, "%Y-%m-%d")
             except:
@@ -123,8 +125,6 @@ class WTDpy:
                     f"Provided date_to '{date_to}' does not match isoformat yyyy-mm-dd"
                 )
             params.update({"date_to": date_to})
-        elif type(date_to) == datetime:
-            params.update({"date_to": str(date_to.date())})
 
         # Check sorting request
         if not sort in ["asc", "desc"]:
@@ -141,45 +141,53 @@ class WTDpy:
             )
 
         # Prepare request per symbol
-        if type(symbol) == str:
-            symbol = [symbol]
+        if isinstance(symbol, str):
+            to_request = [symbol]
+        else:
+            to_request = symbol
 
         # Returning dict
         to_return = {}
 
-        for sym in symbol:
+        for request in to_request:
 
             # Check if provided symbol are available
-            if self.search_available_data(sym):
-                params.update({"symbol": sym})
+            if self.search_available_data(request):
+                params.update({"symbol": request})
             else:
                 raise ValueError("Requested symbols are not available")
 
             # Make the request
-            response = httpx.get(request_url, params=params)
-            response = response.json()
+            response = httpx.get(request_url, params=params).json()
 
             # Alter the response based on input
-            if output == "dict":
-                to_return.update({sym: response})
+            if isinstance(response, dict):
+                if output == "dict":
+                    to_return.update({request: response})
 
-            elif output == "df":
-                to_return.update(
-                    {sym: pd.DataFrame.from_dict(response["history"], orient="index")}
-                )
+                elif output == "df":
+                    to_return.update(
+                        {
+                            request: pd.DataFrame.from_dict(
+                                response["history"], orient="index"
+                            )
+                        }
+                    )
+            else:
+                raise ValueError("The request failed")
 
         if len(to_return) == 1 and output == "df":
-            return to_return[sym]
+            return to_return[request]
 
         else:
             return to_return
 
     def search_available_data(
         self,
-        symbol: Union[str, Sequence[str]],
+        symbol: Union[str, List[str]],
         list_alternatives: bool = False,
         number_of_alternatives: int = 1,
-    ) -> Union[bool, Sequence[dict]]:
+    ) -> Union[bool, List[dict]]:
         """ Check if the requested data is available.
 
         **Parameters**
@@ -201,7 +209,7 @@ class WTDpy:
 
         **Returns**
         
-        response : bool or list
+        matching_symbols or alternatives : bool or list
             A boolean to check whether data is avaible. If 
             `list_alternatives` is `True` and a symbol is not found
             a list with possible alternatives will be returned.
@@ -209,7 +217,7 @@ class WTDpy:
         """
 
         request_url = self.url + "stock_search"
-        params = {"api_token": self.api_token, "limit": number_of_alternatives}
+        params = {"api_token": self.api_token, "limit": str(number_of_alternatives)}
 
         # Matching symbols found
         matching_symbols = False
@@ -219,30 +227,33 @@ class WTDpy:
             alternatives = []
 
         # Prepare request per symbol
-        if type(symbol) == str:
-            symbol = [symbol]
+        if isinstance(symbol, str):
+            to_request = [symbol]
+        else:
+            to_request = symbol
 
-        for sym in symbol:
+        for request in to_request:
             symbol_found = False
-            params.update({"search_term": sym})
-            response = httpx.get(request_url, params=params)
-            response = response.json()
+            params.update({"search_term": request})
+            response = httpx.get(request_url, params=params).json()
 
-            for ix, _ in enumerate(response["data"]):
-                if response["data"][ix]["symbol"] == sym:
-                    symbol_found = True
-                    break
+            # Alter the response based on input
+            if isinstance(response, dict):
+                for ix, _ in enumerate(response["data"]):
+                    if response["data"][ix]["symbol"] == request:
+                        symbol_found = True
+                        break
 
-                else:
-                    symbol_found = False
+                    else:
+                        symbol_found = False
 
-                    if list_alternatives:
-                        alternatives.append(
-                            {
-                                "Symbol": response["data"][ix]["symbol"],
-                                "Name": response["data"][ix]["name"],
-                            }
-                        )
+                        if list_alternatives:
+                            alternatives.append(
+                                {
+                                    "Symbol": response["data"][ix]["symbol"],
+                                    "Name": response["data"][ix]["name"],
+                                }
+                            )
 
             if symbol_found:
                 matching_symbols = True
@@ -256,8 +267,8 @@ class WTDpy:
             return alternatives
 
     def search(
-        self, query: Union[str, Sequence[str]], number_of_hits: int = 5
-    ) -> Union[dict, Sequence[dict]]:
+        self, query: Union[str, List[str]], number_of_hits: int = 5
+    ) -> Dict[str, List[dict]]:
         """ Search the query in the World Trading Data database.
 
         **Parameters**
@@ -273,37 +284,37 @@ class WTDpy:
 
         **Returns**
         
-        response : dict or list
-            A dict, or a list of dicts, with the listed hits based on
-            your search query.
+        returned_hits : dict
+            A dict, with the listed hits based on your search query.
 
         """
 
         request_url = self.url + "stock_search"
-        params = {"api_token": self.api_token, "limit": number_of_hits}
+        params = {"api_token": self.api_token, "limit": str(number_of_hits)}
 
-        returned_hits = {}
+        returned_hits: Dict[str, list] = {}
 
         # Prepare request per symbol
-        if type(query) == str:
-            query = [query]
+        if isinstance(query, str):
+            to_request = [query]
+        else:
+            to_request = query
 
-        for q in query:
-            params.update({"search_term": q})
-            returned_hits.update({q: []})
+        for request in to_request:
+            params.update({"search_term": request})
+            returned_hits.update({request: []})
 
-            response = httpx.get(request_url, params=params)
-            response = response.json()
+            response = httpx.get(request_url, params=params).json()
 
-            for ix, _ in enumerate(response["data"]):
-                returned_hits[q].append(
-                    {
-                        "Symbol": response["data"][ix]["symbol"],
-                        "Name": response["data"][ix]["name"],
-                    }
-                )
-
-        print(returned_hits)
+            # Alter the response based on input
+            if isinstance(response, dict):
+                for ix, _ in enumerate(response["data"]):
+                    returned_hits[request].append(
+                        {
+                            "Symbol": response["data"][ix]["symbol"],
+                            "Name": response["data"][ix]["name"],
+                        }
+                    )
 
         # Return the search results
         return returned_hits
