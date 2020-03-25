@@ -1,30 +1,30 @@
-import json
+"""WTDpy Packge."""
 from datetime import datetime
-from typing import List, Sequence, Union, Optional, Dict
+from typing import List, Union, Optional, Dict
 
 import httpx
 import pandas as pd
 
 
 class WTDpy:
-    """ Python wrapper for the World Trading Data API.
+    """Python wrapper for the World Trading Data API.
 
     **Parameters**
-    
-    api_token : str 
+
+    api_token : str
         Your personal API token from https://www.worldtradingdata.com/.
-    
+
     **Attributes**
 
-    api_token : str 
+    api_token : str
         Your personal API token from https://www.worldtradingdata.com/.
-    
+
     url : str
         The base url for requesting the API.
 
     **Notes**
 
-    Create an account on https://www.worldtradingdata.com/ 
+    Create an account on https://www.worldtradingdata.com/
     to obtain your API key. It will show on the top of your
     personal dashboard. You can make 250 API calls per day
     with the free tier.
@@ -32,12 +32,10 @@ class WTDpy:
     Currently supporting:
         * Historical data;
         * Checking if a symbol excists.
-
     """
 
     def __init__(self, api_token: str) -> None:
-        """Initialisation."""
-
+        """Initialise class."""
         self.url = "https://api.worldtradingdata.com/api/v1/"
         self.api_token = api_token
 
@@ -51,25 +49,25 @@ class WTDpy:
         sort: str = "asc",
         output: str = "dict",
     ) -> Union[dict, pd.DataFrame]:
-        """ Get the historical data for the given symbol.
+        """Get the historical data for the given symbol.
 
         **Parameters**
-        
+
         symbol : str or list of str
-            A string or list of strings such as "^AEX", 
-            or ["^AEX", "^DAX"]. The symbols should match 
-            the format as shown on the World Trading Data site. 
-            You can check https://www.worldtradingdata.com/search 
+            A string or list of strings such as "^AEX",
+            or ["^AEX", "^DAX"]. The symbols should match
+            the format as shown on the World Trading Data site.
+            You can check https://www.worldtradingdata.com/search
             to see what data is available at World Trading Data.
-        
+
         date_from : str or datetime
-            A string representing a date in isoformat (yyyy-mm-dd), 
-            a datetime object or None. If no data is provided 
+            A string representing a date in isoformat (yyyy-mm-dd),
+            a datetime object or None. If no data is provided
             the earliest date will be requested.
 
         date_to: str or datetime
-            A string representing a date in isoformat (yyyy-mm-dd), 
-            a datetime object or None. If no data is provided 
+            A string representing a date in isoformat (yyyy-mm-dd),
+            a datetime object or None. If no data is provided
             the latest date will be requested.
 
         sort: str
@@ -79,9 +77,9 @@ class WTDpy:
         output: str
             A string representing the desired output. Either
             `dict` for a python dict or "df" for a pandas DataFrame.
-        
+
         **Raises**
-        
+
         ValueError
             * If provided symbol is not available.
 
@@ -92,11 +90,10 @@ class WTDpy:
             * If `output` is not a correct string
 
         **Returns**
-        
+
         to_return : dict or pd.DataFrame
             A dictionary or a pandas DataFrame. If `symbol` is a list
             then a dictionary of pandas DataFrames will be returned.
-
         """
 
         request_url = self.url + "history"
@@ -108,9 +105,10 @@ class WTDpy:
         elif isinstance(date_from, str):
             try:
                 datetime.strptime(date_from, "%Y-%m-%d")
-            except:
+            except ValueError:
                 raise TypeError(
-                    f"Provided date_from '{date_from}' does not match isoformat yyyy-mm-dd"
+                    f"Provided date_from '{date_from}' does not match isoformat \
+                    yyyy-mm-dd"
                 )
             params.update({"date_from": date_from})
 
@@ -120,14 +118,14 @@ class WTDpy:
         elif isinstance(date_to, str):
             try:
                 datetime.strptime(date_to, "%Y-%m-%d")
-            except:
+            except ValueError:
                 raise TypeError(
                     f"Provided date_to '{date_to}' does not match isoformat yyyy-mm-dd"
                 )
             params.update({"date_to": date_to})
 
         # Check sorting request
-        if not sort in ["asc", "desc"]:
+        if sort not in ["asc", "desc"]:
             raise TypeError(
                 f"Provided sort '{sort}' is not equal to either 'asc' or 'desc'"
             )
@@ -135,7 +133,7 @@ class WTDpy:
             params.update({"sort": sort})
 
         # Check requested output
-        if not output in ["dict", "df"]:
+        if output not in ["dict", "df"]:
             raise TypeError(
                 f"Provided output '{output}' is not equal to either 'dict' or 'df'"
             )
@@ -188,32 +186,31 @@ class WTDpy:
         list_alternatives: bool = False,
         number_of_alternatives: int = 1,
     ) -> Union[bool, List[dict]]:
-        """ Check if the requested data is available.
+        """Check if the requested data is available.
 
         **Parameters**
-        
+
         symbol : str or list of str
-            A string or list of strings such as "^AEX", 
-            or ["^AEX", "^DAX"]. The symbols should match 
-            the format as shown on the World Trading Data site. 
-            You can check https://www.worldtradingdata.com/search 
+            A string or list of strings such as "^AEX",
+            or ["^AEX", "^DAX"]. The symbols should match
+            the format as shown on the World Trading Data site.
+            You can check https://www.worldtradingdata.com/search
             to see what data is available at World Trading Data.
-        
+
         list_alternatives : bool
-            If `True` a list of likely matches is presented 
-        
+            If `True` a list of likely matches is presented
+
         number_of_alternatives : int
-            The number of alternatives, besides the top hit, 
-            that are checked whether or not they match the 
-            provided symbol. 
+            The number of alternatives, besides the top hit,
+            that are checked whether or not they match the
+            provided symbol.
 
         **Returns**
-        
+
         matching_symbols or alternatives : bool or list
-            A boolean to check whether data is avaible. If 
+            A boolean to check whether data is avaible. If
             `list_alternatives` is `True` and a symbol is not found
             a list with possible alternatives will be returned.
-
         """
 
         request_url = self.url + "stock_search"
@@ -269,24 +266,23 @@ class WTDpy:
     def search(
         self, query: Union[str, List[str]], number_of_hits: int = 5
     ) -> Dict[str, List[dict]]:
-        """ Search the query in the World Trading Data database.
+        """Search the query in the World Trading Data database.
 
         **Parameters**
-        
+
         query : str or list of str
             A string or list of strings such as "Apple computers"
             or ["Apple computers", "Microsoft"]. This is similar
-            to manually checking https://www.worldtradingdata.com/search 
+            to manually checking https://www.worldtradingdata.com/search
             to see what data is available at World Trading Data.
-        
+
         number_of_hits : int
-            The number of hits that will be returned. 
+            The number of hits that will be returned.
 
         **Returns**
-        
+
         returned_hits : dict
             A dict, with the listed hits based on your search query.
-
         """
 
         request_url = self.url + "stock_search"
