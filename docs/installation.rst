@@ -8,17 +8,15 @@ Installation
 Stable release
 --------------
 
+Installing WTDpy via `pip`_ is the preferred method, as it will always install the most recent stable release. If you do not have
+`pip`_ installed, this `Python installation guide`_ can guide you through the process.
+
 To install WTDpy, run this command in your terminal:
 
 .. code-block:: bash
 
     # Use pip to install wtdpy
     pip install wtdpy
-
-This is the preferred method to install WTDpy, as it will always install the most recent stable release.
-
-If you do not have `pip`_ installed, this `Python installation guide`_ can guide
-you through the process.
 
 .. _pip: https://pip.pypa.io
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
