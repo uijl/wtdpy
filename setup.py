@@ -1,22 +1,17 @@
 """The setup script."""
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-requirements = ["pandas", "httpx"]
+with open('requirements.txt') as fh:
+    requirements = fh.read().splitlines()
+
+with open('test-requirements.txt') as fh:
+    test_requirements = fh.read().splitlines()
 
 setup_requirements = ["pytest-runner"]
-
-test_requirements = [
-    "pytest",
-    "pytest-cov",
-    "pytest-timeout",
-    "black",
-    "isort",
-    "pylama",
-]
 
 setup(
     author="Joris den Uijl",
@@ -34,10 +29,10 @@ setup(
     keywords=["wtdpy", "world trading data", "API"],
     name="WTDpy",
     packages=find_packages(include=["wtdpy"]),
-    setup_requires=setup_requirements,
     test_suite="tests",
+    setup_requires=setup_requirements,
     tests_require=test_requirements,
     url="https://github.com/uijl/wtdpy",
-    version="0.0.2",
+    version="0.0.3",
     zip_safe=False,
 )

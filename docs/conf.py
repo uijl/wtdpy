@@ -12,9 +12,11 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
 
 import wtdpy
+
+sys.path.insert(0, os.path.abspath('.'))
+
 
 # -- Project information -----------------------------------------------------
 
@@ -23,7 +25,7 @@ copyright = '2020, Joris den Uijl'
 author = 'Joris den Uijl'
 
 # The full version, including alpha/beta/rc tags
-release = '0.0.2'
+release = '0.0.3'
 
 
 # -- General configuration ---------------------------------------------------
