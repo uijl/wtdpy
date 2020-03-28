@@ -115,3 +115,4 @@ venv.bak/
 data/
 figures/
 notebooks/
+.vscode/settings.json

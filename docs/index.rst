@@ -12,6 +12,7 @@ Welcome to WTDpy documentation! Please check the contents below for information 
    installation
    examples
    wtdpy
+   history
 
 Indices and tables
 ==================
