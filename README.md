@@ -1,5 +1,6 @@
 [![CircleCI](https://circleci.com/gh/uijl/wtdpy.svg?style=svg)](https://circleci.com/gh/uijl/wtdpy)
 [![Documentation Status](https://readthedocs.org/projects/wtdpy/badge/?version=latest)](https://wtdpy.readthedocs.io/en/latest/?badge=latest)
+[![Coverage Status](https://coveralls.io/repos/github/uijl/wtdpy/badge.svg?branch=master)](https://coveralls.io/github/uijl/wtdpy?branch=master)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
 
 # WTDpy
