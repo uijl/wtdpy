@@ -7,3 +7,4 @@ services:
     command: sleep 9999d
     environment:
       - api_key=${api_key}
+      - COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}
