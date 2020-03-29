@@ -7,11 +7,6 @@ jobs:
       - run:
           name: Build and start container
           command: docker-compose up -d
-
-      - run:
-          name: Install coverage badge beforte running tests
-          command: |
-            docker exec -it wtdpy bash -c "pip install coverage coverage-badge"
       
       - run:
           name: Run tests - Pytest
@@ -27,10 +22,10 @@ jobs:
             docker cp wtdpy:/wtdpy/docs/_build/html /tmp/artifacts/docs
       
       - run:
-          name: Generate coverage badge
+          name: Post to Coveralls
           command: |
-            docker exec -it wtdpy bash -c "coverage-badge -o coverage.svg"
-            docker cp wtdpy:/wtdpy/coverage.svg /tmp/artifacts/
+            docker exec -it wtdpy bash -c "pip install coveralls"
+            docker exec -it wtdpy bash -c "coveralls"
       
       - store_artifacts:
           path: /tmp/artifacts
