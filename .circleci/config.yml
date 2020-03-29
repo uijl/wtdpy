@@ -24,7 +24,7 @@ jobs:
       - run:
           name: Post to Coveralls
           command: |
-            docker exec -it wtdpy bash -c "pip install python-coveralls"
+            docker exec -it wtdpy bash -c "pip install coveralls"
             docker exec -it wtdpy bash -c "coveralls"
       
       - store_artifacts:
