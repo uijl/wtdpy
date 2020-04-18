@@ -1,10 +1,6 @@
 [![CircleCI Status](https://circleci.com/gh/uijl/wtdpy.svg?style=svg)](https://circleci.com/gh/uijl/wtdpy)
 [![Documentation Status](https://readthedocs.org/projects/wtdpy/badge/?version=latest)](https://wtdpy.readthedocs.io/en/latest/?badge=latest)
-<<<<<<< HEAD
 [![Coverage Badge](https://artifact-getter.herokuapp.com/get_coverage_badge?circle_url=https://circleci.com/gh/TUDelft-CITG/OpenCLSim&circle_token=4&output=str)](https://artifact-getter.herokuapp.com/get_coverage_report?circle_url=https://circleci.com/gh/uijl/wtdpy&circle_token=4)
-=======
-[![Coverage Status](https://coveralls.io/repos/github/uijl/wtdpy/badge.svg?branch=master)](https://coveralls.io/github/uijl/wtdpy?branch=master)
->>>>>>> 4df1616cc7e12ab123dc4dc420e39fa9186d7c1d
 [![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
 
 # WTDpy
