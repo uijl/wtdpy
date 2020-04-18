@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 
 
-@pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
+@pytest.mark.parametrize("symbol", [["RDSA.AS"], ["RDSA.AS", "UNA.AS"]])
 def test_historical_data(symbol, wtdpy):
     """Test historical data request without additional data."""
 
@@ -17,7 +17,7 @@ def test_historical_data(symbol, wtdpy):
         assert key == symbol[ix]
 
 
-@pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
+@pytest.mark.parametrize("symbol", [["RDSA.AS"], ["RDSA.AS", "UNA.AS"]])
 def test_historical_data_date_from(symbol, wtdpy):
     """Test historical data request with a timewindow."""
 
@@ -42,7 +42,7 @@ def test_historical_data_date_from(symbol, wtdpy):
         response = wtdpy.get_historical_data(symbol, date_from=date_from)
 
 
-@pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
+@pytest.mark.parametrize("symbol", [["RDSA.AS"], ["RDSA.AS", "UNA.AS"]])
 def test_historical_data_date_to(symbol, wtdpy):
     """Test historical data request with a timewindow."""
 
@@ -67,7 +67,7 @@ def test_historical_data_date_to(symbol, wtdpy):
         response = wtdpy.get_historical_data(symbol, date_to=date_to)
 
 
-@pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
+@pytest.mark.parametrize("symbol", [["RDSA.AS"], ["RDSA.AS", "UNA.AS"]])
 def test_historical_data_sort(symbol, wtdpy):
     """Test historical data request with a sort parameter."""
 
@@ -88,7 +88,7 @@ def test_historical_data_sort(symbol, wtdpy):
         )
 
 
-@pytest.mark.parametrize("symbol", [["^AEX"], ["^AEX", "^DAX"]])
+@pytest.mark.parametrize("symbol", [["RDSA.AS"], ["RDSA.AS", "UNA.AS"]])
 def test_historical_data_output(symbol, wtdpy):
     """Test historical data request with an output parameter."""
 
