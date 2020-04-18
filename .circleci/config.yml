@@ -12,7 +12,7 @@ jobs:
           name: Install coverage badge beforte running tests
           command: |
             docker exec -it wtdpy bash -c "pip install coverage coverage-badge"
-      
+
       - run:
           name: Run tests - Pytest
           command: |
@@ -25,13 +25,13 @@ jobs:
             docker exec -it wtdpy bash -c "pip install sphinx"
             docker exec -it wtdpy bash -c "python setup.py docs"
             docker cp wtdpy:/wtdpy/docs/_build/html /tmp/artifacts/docs
-      
+
       - run:
           name: Generate coverage badge
           command: |
             docker exec -it wtdpy bash -c "coverage-badge -o coverage.svg"
             docker cp wtdpy:/wtdpy/coverage.svg /tmp/artifacts/
-      
+
       - store_artifacts:
           path: /tmp/artifacts
 
