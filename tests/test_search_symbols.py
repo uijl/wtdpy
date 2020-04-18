@@ -11,7 +11,9 @@ def test_search_symbols(symbol, wtdpy):
     assert wtdpy.search_available_data(symbol)
 
 
-@pytest.mark.parametrize("symbol", [["Royal Dutch Shell"], ["Royal Dutch Shell", "Unilever"]])
+@pytest.mark.parametrize(
+    "symbol", [["Royal Dutch Shell"], ["Royal Dutch Shell", "Unilever"]]
+)
 def test_search_symbols_list_alternative(symbol, wtdpy):
     """Test search request without additional data."""
 
@@ -20,7 +22,9 @@ def test_search_symbols_list_alternative(symbol, wtdpy):
     assert len(symbol) == len(response)
 
 
-@pytest.mark.parametrize("symbol", [["Royal Dutch Shell"], ["Royal Dutch Shell", "Unilever"]])
+@pytest.mark.parametrize(
+    "symbol", [["Royal Dutch Shell"], ["Royal Dutch Shell", "Unilever"]]
+)
 def test_search_symbols_list_alternatives(symbol, wtdpy):
     """Test search request without additional data."""
 
