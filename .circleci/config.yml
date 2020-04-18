@@ -27,7 +27,7 @@ jobs:
             docker cp wtdpy:/wtdpy/docs/_build/html /tmp/artifacts/docs
 
       - run:
-          name: Generate coverage badge
+          name: Post to Coveralls
           command: |
             docker exec -it wtdpy bash -c "coverage-badge -o coverage.svg"
             docker cp wtdpy:/wtdpy/coverage.svg /tmp/artifacts/
